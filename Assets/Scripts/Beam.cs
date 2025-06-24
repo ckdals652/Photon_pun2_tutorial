@@ -1,16 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using Photon.Pun;
 using UnityEngine;
 
-public class Beam : MonoBehaviour
+public class Beam : MonoBehaviourPun
 {
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 6)
         {
-            other.gameObject.GetComponent<Player>()
+            other.gameObject.GetComponent<PlayerHandler>().playerHealth(-5);
         }
     }
 }

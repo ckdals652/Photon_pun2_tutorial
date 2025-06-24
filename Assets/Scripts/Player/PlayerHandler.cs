@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
-public class PlayerHandler : MonoBehaviour
+public class PlayerHandler : MonoBehaviourPun
 {
     private PlayerStatus playerStatus = new PlayerStatus();
 

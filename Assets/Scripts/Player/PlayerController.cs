@@ -1,4 +1,4 @@
-using Cinemachine;
+
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,15 +13,14 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] private float dashForce = 15f;
     [SerializeField] private float maxSpeed = 10f;
 
-    private CinemachineFreeLook freeLookCamera;
-    private Camera mainCamera;
+    [SerializeField] private Camera mainCamera;
 
     [SerializeField] private Transform Beam;
 
     private bool dashPressed = false;
     private Vector3 lastMoveDirection = Vector3.forward;
 
-    private void Awake()
+    private void Awake() 
     {
         playerRigidBody = GetComponent<Rigidbody>();
         input = new PlayerAction();
@@ -43,22 +42,12 @@ public class PlayerController : MonoBehaviourPun
             //메인 카메라 찾아주기
             if (mainCamera == null)
             {
-                mainCamera = Camera.main;
+                mainCamera = transform.Find("Main Camera").GetComponent<Camera>();
+                mainCamera.gameObject.SetActive(true);
+                mainCamera.GetComponent<PlayerCameraAim>()?.SetInput(input);
+                mainCamera.GetComponent<PlayerCameraAim>().target = transform;
             }
 
-            //FreeLook 찾기 (혹은 미리 연결)
-            if (freeLookCamera == null)
-            {
-                freeLookCamera = FindObjectOfType<CinemachineFreeLook>();
-            }
-
-            // FreeLook 카메라가 있다면 나를 타겟으로 지정
-            if (freeLookCamera != null)
-            {
-                freeLookCamera.Follow = transform;
-                freeLookCamera.LookAt = transform;
-            }
-            
             //자식에 beam찾아서 넣어주기
             if (Beam == null)
             {
@@ -158,6 +147,7 @@ public class PlayerController : MonoBehaviourPun
                                  * dashForce, ForceMode.Impulse);
     }
 
+    
     private void OnBeam()
     {
         if (input.PlayerActionMap.Attack.inProgress)
