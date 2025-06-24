@@ -370,8 +370,8 @@ GameObject:
   - component: {fileID: 5525119714798011463}
   - component: {fileID: 2185306827419741433}
   - component: {fileID: 1208913738019761088}
-  - component: {fileID: 2000168035698893160}
   - component: {fileID: 2178395173655270360}
+  - component: {fileID: 6072465095679685760}
   - component: {fileID: 4841391506080958318}
   m_Layer: 6
   m_Name: PlayerPrefab
@@ -516,22 +516,6 @@ MonoBehaviour:
   maxSpeed: 20
   mainCamera: {fileID: 0}
   Beam: {fileID: 0}
---- !u!114 &2000168035698893160
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6690834918330074856}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 1
-  m_TeleportEnabled: 1
-  m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &2178395173655270360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -542,6 +526,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd7a246ce10f57a4b89442660d7344b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6072465095679685760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6690834918330074856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb3075e16bf0853478be0a93cd0b1449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &4841391506080958318
@@ -563,7 +559,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 2000168035698893160}
+  - {fileID: 6072465095679685760}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

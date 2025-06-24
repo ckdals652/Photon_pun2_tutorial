@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviourPun
 
         // 6. 이동 적용
         playerRigidBody.AddForce(force, ForceMode.Force);
-
+ 
         // 7. 마지막 방향 저장
         if (force != Vector3.zero)
         {
@@ -133,7 +133,7 @@ public class PlayerController : MonoBehaviourPun
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             transform.rotation = Quaternion.Slerp
-                (transform.rotation, targetRotation, 45f * Time.fixedDeltaTime);
+                (transform.rotation, targetRotation, 10f * Time.fixedDeltaTime);
             //transform.rotation = targetRotation;
         }
     }

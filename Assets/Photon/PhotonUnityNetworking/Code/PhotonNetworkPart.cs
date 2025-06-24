@@ -427,10 +427,10 @@ namespace Photon.Pun
                 return;
             }
 
-            if (PhotonNetwork.LogLevel >= PunLogLevel.Full)
-            {
-                Debug.Log("Received RPC: " + inMethodName);
-            }
+            // if (PhotonNetwork.LogLevel >= PunLogLevel.Full)
+            // {
+            //     Debug.Log("Received RPC: " + inMethodName);
+            // }
 
 
             // SetReceiving filtering
@@ -851,10 +851,10 @@ namespace Photon.Pun
                 }
             }
 
-            if (PhotonNetwork.LogLevel >= PunLogLevel.Full)
-            {
-                Debug.Log("Network destroy Instantiated GO: " + go.name);
-            }
+            // if (PhotonNetwork.LogLevel >= PunLogLevel.Full)
+            // {
+            //     Debug.Log("Network destroy Instantiated GO: " + go.name);
+            // }
             
             foundPVs.Clear();           // as foundPVs is re-used, clean it to avoid lingering references
 
@@ -995,7 +995,7 @@ namespace Photon.Pun
             if (netView.ViewID == 0)
             {
                 // don't register views with ID 0 (not initialized). they register when a ID is assigned later on
-                Debug.Log("PhotonView register is ignored, because viewID is 0. No id assigned yet to: " + netView);
+                //Debug.Log("PhotonView register is ignored, because viewID is 0. No id assigned yet to: " + netView);
                 return;
             }
 
@@ -1022,10 +1022,10 @@ namespace Photon.Pun
 
             //Debug.LogError("view being added. " + netView);	// Exit Games internal log
 
-            if (PhotonNetwork.LogLevel >= PunLogLevel.Full)
-            {
-                Debug.Log("Registered PhotonView: " + netView.ViewID);
-            }
+            // if (PhotonNetwork.LogLevel >= PunLogLevel.Full)
+            // {
+            //     Debug.Log("Registered PhotonView: " + netView.ViewID);
+            // }
         }
 
 
@@ -1204,10 +1204,10 @@ namespace Photon.Pun
                 Debug.LogError("Illegal view ID:" + view.ViewID + " method: " + methodName + " GO:" + view.gameObject.name);
             }
 
-            if (PhotonNetwork.LogLevel >= PunLogLevel.Full)
-            {
-                Debug.Log("Sending RPC \"" + methodName + "\" to target: " + target + " or player:" + player + ".");
-            }
+            // if (PhotonNetwork.LogLevel >= PunLogLevel.Full)
+            // {
+            //     Debug.Log("Sending RPC \"" + methodName + "\" to target: " + target + " or player:" + player + ".");
+            // }
 
 
             //ts: changed RPCs to a one-level hashtable as described in internal.txt
@@ -1497,11 +1497,11 @@ namespace Photon.Pun
                 photonViewList.Remove(key);
             }
 
-            if (removeKeys.Count > 0)
-            {
-                if (PhotonNetwork.LogLevel >= PunLogLevel.Informational)
-                    Debug.Log("New level loaded. Removed " + removeKeys.Count + " scene view IDs from last level.");
-            }
+            // if (removeKeys.Count > 0)
+            // {
+            //     if (PhotonNetwork.LogLevel >= PunLogLevel.Informational)
+            //         Debug.Log("New level loaded. Removed " + removeKeys.Count + " scene view IDs from last level.");
+            // }
         }
 
 
@@ -2482,10 +2482,10 @@ namespace Photon.Pun
                     {
                         string previousBestRegionSummary = PhotonNetwork.BestRegionSummaryInPreferences;
 
-                        if (PhotonNetwork.LogLevel >= PunLogLevel.Informational)
-                        {
-                            Debug.Log("PUN got region list. Going to ping minimum regions, based on this previous result summary: " + previousBestRegionSummary);
-                        }
+                        // if (PhotonNetwork.LogLevel >= PunLogLevel.Informational)
+                        // {
+                        //     Debug.Log("PUN got region list. Going to ping minimum regions, based on this previous result summary: " + previousBestRegionSummary);
+                        // }
                         NetworkingClient.RegionHandler.PingMinimumOfRegions(OnRegionsPinged, previousBestRegionSummary);
                     }
                     break;
@@ -2520,10 +2520,10 @@ namespace Photon.Pun
 
         private static void OnRegionsPinged(RegionHandler regionHandler)
         {
-            if (PhotonNetwork.LogLevel >= PunLogLevel.Informational)
-            {
-                Debug.Log(regionHandler.GetResults());
-            }
+            // if (PhotonNetwork.LogLevel >= PunLogLevel.Informational)
+            // {
+            //     Debug.Log(regionHandler.GetResults());
+            // }
 
             _cachedRegionHandler = regionHandler;
             //PhotonNetwork.BestRegionSummaryInPreferences = regionHandler.SummaryToCache; // can not be called here, as it's not in the main thread

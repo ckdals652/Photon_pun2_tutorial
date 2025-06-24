@@ -30,12 +30,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player other)
     {
-        Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName); // seen when other disconnects
+        //Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName); // seen when other disconnects
 
         if (PhotonNetwork.IsMasterClient)
         {
-            Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}",
-                PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
+            // Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}",
+            //     PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
             LoadArena();
         }
@@ -56,13 +56,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void LoadArena()
     {
-        if (!PhotonNetwork.IsMasterClient)
-        {
-            Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
-            return;
-        }
+        // if (!PhotonNetwork.IsMasterClient)
+        // {
+        //     Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
+        //     return;
+        // }
 
-        Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
+        //Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
         PhotonNetwork.LoadLevel("Room for " + PhotonNetwork.CurrentRoom.PlayerCount);
     }
 
