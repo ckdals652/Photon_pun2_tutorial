@@ -1,4 +1,3 @@
-
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,7 +19,9 @@ public class PlayerController : MonoBehaviourPun
     private bool dashPressed = false;
     private Vector3 lastMoveDirection = Vector3.forward;
 
-    private void Awake() 
+    private bool isBeamOn = false;
+
+    private void Awake()
     {
         playerRigidBody = GetComponent<Rigidbody>();
         input = new PlayerAction();
@@ -47,13 +48,9 @@ public class PlayerController : MonoBehaviourPun
                 mainCamera.GetComponent<PlayerCameraAim>()?.SetInput(input);
                 mainCamera.GetComponent<PlayerCameraAim>().target = transform;
             }
-
-            //자식에 beam찾아서 넣어주기
-            if (Beam == null)
-            {
-                Beam = transform.Find("Beam");
-            }
         }
+        //자식에 beam찾아서 넣어주기
+        Beam = transform.Find("Beam");
     }
 
     private void OnDisable()
@@ -147,16 +144,30 @@ public class PlayerController : MonoBehaviourPun
                                  * dashForce, ForceMode.Impulse);
     }
 
-    
+
     private void OnBeam()
     {
-        if (input.PlayerActionMap.Attack.inProgress)
+        if (!photonView.IsMine) return;
+
+        bool attackHeld = input.PlayerActionMap.Attack.ReadValue<float>() > 0.1f;
+
+        if (attackHeld != isBeamOn)
         {
-            Beam.gameObject.SetActive(true);
+            isBeamOn = attackHeld;
+            Beam.gameObject.SetActive(isBeamOn);
+            photonView.RPC("SetBeamActive", RpcTarget.Others, isBeamOn);
         }
-        else
+    }
+
+    [PunRPC]
+    private void SetBeamActive(bool isActive)
+    {
+        if (Beam == null)
         {
-            Beam.gameObject.SetActive(false);
+            Debug.LogWarning("Beam is not assigned when SetBeamActive is called.");
+            return;
         }
+
+        Beam.gameObject.SetActive(isActive);
     }
 }
