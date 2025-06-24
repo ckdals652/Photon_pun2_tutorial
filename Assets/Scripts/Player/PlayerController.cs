@@ -1,3 +1,4 @@
+using Cinemachine;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,6 +12,11 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] private float verticalSpeed = 5f;
     [SerializeField] private float dashForce = 15f;
     [SerializeField] private float maxSpeed = 10f;
+
+    private CinemachineFreeLook freeLookCamera;
+    private Camera mainCamera;
+
+    [SerializeField] private Transform Beam;
 
     private bool dashPressed = false;
     private Vector3 lastMoveDirection = Vector3.forward;
@@ -27,6 +33,37 @@ public class PlayerController : MonoBehaviourPun
         {
             //이동 활성화
             input.Enable();
+        }
+    }
+
+    private void Start()
+    {
+        if (photonView.IsMine)
+        {
+            //메인 카메라 찾아주기
+            if (mainCamera == null)
+            {
+                mainCamera = Camera.main;
+            }
+
+            //FreeLook 찾기 (혹은 미리 연결)
+            if (freeLookCamera == null)
+            {
+                freeLookCamera = FindObjectOfType<CinemachineFreeLook>();
+            }
+
+            // FreeLook 카메라가 있다면 나를 타겟으로 지정
+            if (freeLookCamera != null)
+            {
+                freeLookCamera.Follow = transform;
+                freeLookCamera.LookAt = transform;
+            }
+            
+            //자식에 beam찾아서 넣어주기
+            if (Beam == null)
+            {
+                Beam = transform.Find("Beam");
+            }
         }
     }
 
@@ -47,6 +84,8 @@ public class PlayerController : MonoBehaviourPun
         {
             dashPressed = true;
         }
+
+        OnBeam();
     }
 
     private void FixedUpdate()
@@ -64,29 +103,52 @@ public class PlayerController : MonoBehaviourPun
 
     private void Move()
     {
-        // 1. 방향 입력 받기 (Vector2)
+        // 1. 입력 받기
         Vector2 moveInput = input.PlayerActionMap.Move.ReadValue<Vector2>();
-        Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
 
-        // 2. 수직 입력 (RiseFall → Space or Ctrl 둘 중 하나라도 누르면)
+        // 2. 카메라 기준 방향 설정
+        Vector3 camForward = mainCamera.transform.forward;
+        Vector3 camRight = mainCamera.transform.right;
+
+        // y축 방향 제거 (지면 기준 방향으로)
+        camForward.y = 0;
+        camRight.y = 0;
+        camForward.Normalize();
+        camRight.Normalize();
+
+        // 3. 카메라 기준 이동 방향 계산
+        Vector3 moveDirection = camForward * moveInput.y + camRight * moveInput.x;
+
+        // 4. 수직 이동 처리 (Space / Ctrl)
         float y = 0f;
         if (Keyboard.current.spaceKey.isPressed) y += 1f;
         if (Keyboard.current.leftCtrlKey.isPressed) y -= 1f;
 
-        // 3. 최종 속도 설정
-        Vector3 force = (move * moveSpeed) + (Vector3.up * (y * verticalSpeed));
-        playerRigidBody.AddForce(force,ForceMode.Force);
-        
-        //입력한 마지막 방향 정해주기
+        // 5. 최종 이동 벡터
+        Vector3 force = moveDirection.normalized * moveSpeed + Vector3.up * (y * verticalSpeed);
+
+        // 6. 이동 적용
+        playerRigidBody.AddForce(force, ForceMode.Force);
+
+        // 7. 마지막 방향 저장
         if (force != Vector3.zero)
         {
-            lastMoveDirection = playerRigidBody.velocity;
+            lastMoveDirection = force;
         }
-        
-        // 속도 제한
+
+        // 8. 최대 속도 제한
         if (playerRigidBody.velocity.magnitude > maxSpeed)
         {
             playerRigidBody.velocity = playerRigidBody.velocity.normalized * maxSpeed;
+        }
+
+        // 9. 이동 방향이 있을 때 회전
+        if (moveDirection != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            transform.rotation = Quaternion.Slerp
+                (transform.rotation, targetRotation, 45f * Time.fixedDeltaTime);
+            //transform.rotation = targetRotation;
         }
     }
 
@@ -94,5 +156,17 @@ public class PlayerController : MonoBehaviourPun
     {
         playerRigidBody.AddForce(lastMoveDirection.normalized
                                  * dashForce, ForceMode.Impulse);
+    }
+
+    private void OnBeam()
+    {
+        if (input.PlayerActionMap.Attack.inProgress)
+        {
+            Beam.gameObject.SetActive(true);
+        }
+        else
+        {
+            Beam.gameObject.SetActive(false);
+        }
     }
 }

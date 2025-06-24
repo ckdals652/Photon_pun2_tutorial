@@ -71,6 +71,15 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""6cb93ea5-a5d7-43ad-9235-441b3523000b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -183,6 +192,17 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""action"": ""SpeedUp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b9341610-54d8-4983-bae8-4fbcaa8ece0f"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -196,6 +216,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         m_PlayerActionMap_MouseAim = m_PlayerActionMap.FindAction("MouseAim", throwIfNotFound: true);
         m_PlayerActionMap_Dash = m_PlayerActionMap.FindAction("Dash", throwIfNotFound: true);
         m_PlayerActionMap_SpeedUp = m_PlayerActionMap.FindAction("SpeedUp", throwIfNotFound: true);
+        m_PlayerActionMap_Attack = m_PlayerActionMap.FindAction("Attack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -262,6 +283,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActionMap_MouseAim;
     private readonly InputAction m_PlayerActionMap_Dash;
     private readonly InputAction m_PlayerActionMap_SpeedUp;
+    private readonly InputAction m_PlayerActionMap_Attack;
     public struct PlayerActionMapActions
     {
         private @PlayerAction m_Wrapper;
@@ -271,6 +293,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         public InputAction @MouseAim => m_Wrapper.m_PlayerActionMap_MouseAim;
         public InputAction @Dash => m_Wrapper.m_PlayerActionMap_Dash;
         public InputAction @SpeedUp => m_Wrapper.m_PlayerActionMap_SpeedUp;
+        public InputAction @Attack => m_Wrapper.m_PlayerActionMap_Attack;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActionMap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -295,6 +318,9 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @SpeedUp.started += instance.OnSpeedUp;
             @SpeedUp.performed += instance.OnSpeedUp;
             @SpeedUp.canceled += instance.OnSpeedUp;
+            @Attack.started += instance.OnAttack;
+            @Attack.performed += instance.OnAttack;
+            @Attack.canceled += instance.OnAttack;
         }
 
         private void UnregisterCallbacks(IPlayerActionMapActions instance)
@@ -314,6 +340,9 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @SpeedUp.started -= instance.OnSpeedUp;
             @SpeedUp.performed -= instance.OnSpeedUp;
             @SpeedUp.canceled -= instance.OnSpeedUp;
+            @Attack.started -= instance.OnAttack;
+            @Attack.performed -= instance.OnAttack;
+            @Attack.canceled -= instance.OnAttack;
         }
 
         public void RemoveCallbacks(IPlayerActionMapActions instance)
@@ -338,5 +367,6 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         void OnMouseAim(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnSpeedUp(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
     }
 }
